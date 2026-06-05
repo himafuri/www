@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "www",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-04-01",
+  // nodejs_compat is required for Payload to run in the Workers runtime.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "www"
+    }
+  ],
+  "d1_databases": [
+    {
+      // Binding name must match `cloudflare.env.D1` in src/payload.config.ts.
+      "binding": "D1",
+      "database_name": "www-db",
+      // Placeholder is fine for local dev (miniflare ignores it). When you
+      // deploy, run `wrangler d1 create www-db` and paste the real id here.
+      "database_id": "local-dev-placeholder"
+    }
+  ]
+}

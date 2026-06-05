@@ -1,0 +1,21 @@
+# Toolchain sandbox: pins Node 24 LTS + pnpm 10 (Payload doesn't support pnpm 11).
+# The database is Cloudflare D1, so there is NO local db service here - the D1
+# binding is provided by the Cloudflare runtime (wrangler / @opennextjs/cloudflare),
+# not by docker-compose.
+# Debian (-slim), NOT alpine: wrangler's workerd needs glibc and won't run on musl.
+services:
+  payload:
+    image: node:24-slim
+    init: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    working_dir: /home/node/app
+    command: sh -c "corepack enable && corepack prepare pnpm@latest-10 --activate && pnpm install && pnpm dev"
+    env_file:
+      - .env
+
+volumes:
+  node_modules:
