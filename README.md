@@ -76,6 +76,48 @@ Or open a shell inside the toolchain:
 docker compose run --rm payload sh
 ```
 
+### Common commands cheat-sheet
+
+There are two ways to run a command in the container, and the right one depends on whether the app is already running:
+
+- **`docker compose exec`** runs the command inside the container that `docker compose up` already started. Prefer this while the app is up: it is faster and `pnpm` is already on the path (no `corepack enable` needed).
+- **`docker compose run --rm`** spins up a fresh throwaway container for a single command and deletes it afterwards. Use this when the app is **not** running. Because the container is fresh, prefix toolchain commands with `corepack enable &&`.
+
+Day-to-day lifecycle:
+
+```bash
+docker compose up            # start; logs stream here, Ctrl+C stops it
+docker compose up -d         # start in the background (detached)
+docker compose down          # stop and remove the container
+docker compose down -v       # also delete the node_modules volume (forces a clean reinstall)
+docker compose restart       # quick restart without removing the container
+docker compose logs -f       # follow logs of a backgrounded container
+docker compose ps            # show whether the app is running and which ports are mapped
+```
+
+Running project commands (app already running, via `exec`):
+
+```bash
+docker compose exec payload sh                 # open a shell; then just run `pnpm ...`
+docker compose exec payload pnpm lint
+docker compose exec payload pnpm generate:types
+docker compose exec payload pnpm test:int      # integration tests (vitest)
+docker compose exec payload pnpm install       # pick up new deps after editing package.json
+```
+
+Running project commands (app not running, via `run`):
+
+```bash
+docker compose run --rm payload sh -lc "corepack enable && pnpm lint"
+docker compose run --rm payload sh             # fresh one-off shell
+```
+
+Good to know:
+
+- Editing files under `./src` hot-reloads automatically; no restart needed. Only changing `docker-compose.yml` or dependencies requires a restart or reinstall.
+- The database is the local `.wrangler/` folder, not a container. It survives `docker compose down`. Delete that folder for a clean database.
+- `down -v` is the only destructive flag here: it wipes the `node_modules` volume, not your source code.
+
 ### Troubleshooting
 
 - **`docker compose up` fails complaining about `.env`:** make sure you completed step 2. The file must exist.
