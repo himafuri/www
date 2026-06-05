@@ -1,18 +1,17 @@
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { FlatCompat } from '@eslint/eslintrc'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals'
+import nextTypescript from 'eslint-config-next/typescript'
+import reactHooks from 'eslint-plugin-react-hooks'
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...nextCoreWebVitals,
+  ...nextTypescript,
   {
     rules: {
+      // React Compiler Rules of React (eslint-plugin-react-hooks v7 "recommended-latest":
+      // rules-of-hooks, exhaustive-deps, plus the compiler-correctness rules such as
+      // purity, immutability, set-state-in-render and preserve-manual-memoization).
+      // The react-hooks plugin is already registered by eslint-config-next.
+      ...reactHooks.configs['recommended-latest'].rules,
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-empty-object-type': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',

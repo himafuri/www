@@ -9,6 +9,7 @@ const dirname = path.dirname(__filename);
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  reactCompiler: true,
   images: {
     localPatterns: [
       {
