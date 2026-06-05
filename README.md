@@ -89,7 +89,7 @@ Day-to-day lifecycle:
 docker compose up            # start; logs stream here, Ctrl+C stops it
 docker compose up -d         # start in the background (detached)
 docker compose down          # stop and remove the container
-docker compose down -v       # also delete the node_modules volume (forces a clean reinstall)
+docker compose down -v       # also delete the node_modules volumes (forces a clean reinstall)
 docker compose restart       # quick restart without removing the container
 docker compose logs -f       # follow logs of a backgrounded container
 docker compose ps            # show whether the app is running and which ports are mapped
@@ -116,13 +116,42 @@ Good to know:
 
 - Editing files under `./src` hot-reloads automatically; no restart needed. Only changing `docker-compose.yml` or dependencies requires a restart or reinstall.
 - The database is the local `.wrangler/` folder, not a container. It survives `docker compose down`. Delete that folder for a clean database.
-- `down -v` is the only destructive flag here: it wipes the `node_modules` volume, not your source code.
+- `down -v` is the only destructive flag here: it wipes the `node_modules` volumes, not your source code.
+- Integration tests (`pnpm test:int`) run in the `payload` container, but the Playwright e2e tests need a browser and run in their own service. See [Running end-to-end (Playwright) tests](#running-end-to-end-playwright-tests).
+
+### Running end-to-end (Playwright) tests
+
+The integration tests run in the normal `payload` container, but the Playwright e2e tests need a real browser, which `node:24-slim` does not have. They run in a dedicated `playwright` service that uses [Microsoft's official Playwright image](https://playwright.dev/docs/docker) (Chromium plus its system libraries, pre-pinned to the `@playwright/test` version in `package.json`). The service sits behind a `test` profile, so a normal `docker compose up` never starts it.
+
+Run the whole e2e suite:
+
+```bash
+docker compose run --rm playwright
+```
+
+The first run pulls the Playwright image (~2.7 GB) and installs dependencies into a separate volume, so it takes a few minutes; later runs are quick. The service starts its own `pnpm dev` inside the container (via the `webServer` block in `playwright.config.ts`), seeds a test user, runs the specs against `http://localhost:3000`, and writes an HTML report to `playwright-report/` (gitignored). The terminal shows live `list` output; to browse the HTML report afterwards run `docker compose run --rm playwright pnpm exec playwright show-report`.
+
+To run a single spec or debug interactively, open a shell in the Playwright image (the browser and its deps are already there):
+
+```bash
+docker compose run --rm playwright bash
+# then inside the container:
+corepack enable && corepack prepare pnpm@latest-10 --activate && pnpm install
+pnpm test:e2e tests/e2e/frontend.e2e.spec.ts
+```
+
+Notes:
+
+- The e2e tests use the same local D1 database in `.wrangler/` and seed/delete a `dev@payloadcms.com` user. Run them with the dev server (`docker compose up`) stopped so the two do not write to that SQLite database at the same time.
+- The `playwright` service has its own `node_modules` volume because its image ships a different Node version than the dev service. `docker compose down -v` clears both volumes.
 
 ### Troubleshooting
 
 - **`docker compose up` fails complaining about `.env`:** make sure you completed step 2. The file must exist.
 - **Port 3000 already in use:** stop whatever is using it, or change the host port in `docker-compose.yml` (for example `"3001:3000"`).
 - **First page load is slow:** the dev server compiles the Payload admin on the first request. Later loads are quick.
+- **`docker compose run --rm playwright` is slow the first time:** it pulls Microsoft's Playwright image (~2.7 GB) once, then reuses it.
+- **e2e tests fail to seed a user, or you see "database is locked":** stop the dev server with `docker compose down` before running e2e. Both the dev server and the tests open the same local D1 database in `.wrangler/`.
 
 ## How it works
 
