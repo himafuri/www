@@ -1,4 +1,4 @@
-# www (HIMAFURI's Website)
+# www (HIMAFURI's official website)
 
 A [Payload CMS](https://payloadcms.com) 3.x project (Next.js 16) that runs on Cloudflare Workers, backed by a Cloudflare D1 (SQLite) database.
 
