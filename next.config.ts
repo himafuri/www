@@ -7,6 +7,12 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(__filename);
 
+interface WebpackConfig {
+  resolve?: {
+    extensionAlias?: Record<string, string[]>;
+  };
+}
+
 const nextConfig: NextConfig = {
   output: "standalone",
   reactCompiler: true,
@@ -17,7 +23,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (webpackConfig) => {
+  webpack: (webpackConfig: WebpackConfig): WebpackConfig => {
+    webpackConfig.resolve ??= {};
     webpackConfig.resolve.extensionAlias = {
       ".cjs": [".cts", ".cjs"],
       ".js": [".ts", ".tsx", ".js", ".jsx"],
@@ -34,4 +41,4 @@ const nextConfig: NextConfig = {
 export default withPayload(nextConfig, { devBundleServerPackages: false });
 
 // Makes Cloudflare bindings (D1, etc.) available to `next dev` via getCloudflareContext().
-initOpenNextCloudflareForDev();
+void initOpenNextCloudflareForDev();

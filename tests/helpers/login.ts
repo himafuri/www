@@ -20,8 +20,12 @@ export async function login({
 }: LoginOptions): Promise<void> {
   await page.goto(`${serverURL}/admin/login`)
 
-  await page.fill('#field-email', user.email)
-  await page.fill('#field-password', user.password)
+  const emailField = page.locator('#field-email')
+  const passwordField = page.locator('#field-password')
+
+  await expect(emailField).toBeVisible({ timeout: 90_000 })
+  await emailField.fill(user.email)
+  await passwordField.fill(user.password)
   await page.click('button[type="submit"]')
 
   await page.waitForURL(`${serverURL}/admin`)
