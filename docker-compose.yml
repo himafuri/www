@@ -27,7 +27,7 @@ services:
   # package.json. node:24-slim has no browser, and downloading one at build time
   # pulls from cdn.playwright.dev, which stalls intermittently.
   playwright:
-    image: mcr.microsoft.com/playwright:v1.58.2-noble
+    image: mcr.microsoft.com/playwright:v1.60.0-noble
     init: true
     profiles: ["test"]
     volumes:

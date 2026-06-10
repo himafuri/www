@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import './styles.css'
 
 export const metadata = {
@@ -6,7 +6,11 @@ export const metadata = {
   title: 'Payload Blank Template',
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
+interface RootLayoutProps {
+  children: ReactNode
+}
+
+export default function RootLayout(props: RootLayoutProps) {
   const { children } = props
 
   return (

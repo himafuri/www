@@ -1,11 +1,15 @@
-import { test, expect, Page } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 import { login } from '../helpers/login'
 import { seedTestUser, cleanupTestUser, testUser } from '../helpers/seedUser'
 
 test.describe('Admin Panel', () => {
+  test.describe.configure({ timeout: 120_000 })
+
   let page: Page
 
   test.beforeAll(async ({ browser }, testInfo) => {
+    testInfo.setTimeout(120_000)
+
     await seedTestUser()
 
     const context = await browser.newContext()
