@@ -24,6 +24,20 @@ const effectHookRestrictionRules = {
             "Do not use React effect hooks directly. Prefer a library such as TanStack Query, or add a documented wrapper hook for the specific case.",
         },
       ],
+      patterns: [
+        {
+          group: [
+            "*/internal/**",
+            "@*/**/internal/**",
+            "*/private/**",
+            "@*/**/private/**",
+            "*/dist/internal/**",
+            "@*/**/dist/internal/**",
+          ],
+          message:
+            "Do not import from deep or private package paths. Use the package's public exports instead.",
+        },
+      ],
     },
   ],
   "no-restricted-syntax": [
@@ -42,6 +56,22 @@ const effectHookRestrictionRules = {
     {
       selector: "UnaryExpression[operator='void'][argument.value=0]",
       message: "void 0 is disallowed. Use undefined instead.",
+    },
+    {
+      selector:
+        "TSAsExpression[expression.type='TSAsExpression'][expression.typeAnnotation.type='TSUnknownKeyword']",
+      message:
+        "Double assertions are disallowed. Use a type guard, schema validation, or a named boundary helper instead.",
+    },
+    {
+      selector: "TSEnumDeclaration",
+      message:
+        "Enums are disallowed. Use a string-literal union or an as const object instead.",
+    },
+    {
+      selector: "UnaryExpression[operator='delete']",
+      message:
+        "delete is disallowed. Prefer immutable omit/destructure or explicit Map/record modeling.",
     },
   ],
 };
@@ -73,11 +103,28 @@ const eslintConfig = tseslint.config(
       ...reactHooks.configs["recommended-latest"].rules,
       ...jsxA11y.flatConfigs.recommended.rules,
       ...effectHookRestrictionRules,
-      "@typescript-eslint/ban-ts-comment": "error",
+      "@typescript-eslint/ban-ts-comment": [
+        "error",
+        {
+          "ts-check": false,
+          "ts-expect-error": "allow-with-description",
+          "ts-ignore": true,
+          "ts-nocheck": true,
+        },
+      ],
       "@typescript-eslint/no-array-constructor": "error",
       "@typescript-eslint/no-empty-object-type": "error",
       "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-non-null-assertion": "error",
+      "@typescript-eslint/no-namespace": [
+        "error",
+        {
+          allowDefinitionFiles: true,
+        },
+      ],
+      "@typescript-eslint/no-unnecessary-type-assertion": "error",
+      "@typescript-eslint/no-unsafe-type-assertion": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -90,11 +137,17 @@ const eslintConfig = tseslint.config(
           caughtErrorsIgnorePattern: "^(_|ignore)",
         },
       ],
+      "@typescript-eslint/no-wrapper-object-types": "error",
       "no-array-constructor": "off",
+      "no-bitwise": "error",
+      "no-empty": ["error", { allowEmptyCatch: false }],
       "no-eval": "error",
+      "no-extend-native": "error",
+      "no-global-assign": "error",
       "no-implied-eval": "error",
       "no-labels": "error",
       "no-new-func": "error",
+      "no-var": "error",
       "no-with": "error",
       "prefer-object-has-own": "error",
       "react/react-in-jsx-scope": "off",
