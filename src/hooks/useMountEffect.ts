@@ -1,4 +1,4 @@
-import { useEffect, type EffectCallback } from 'react'
+import { useEffect, type EffectCallback } from "react";
 
 /**
  * Runs an effect only when the component mounts, and cleans it up on unmount.
@@ -9,7 +9,7 @@ import { useEffect, type EffectCallback } from 'react'
  */
 function useMountEffect(effect: EffectCallback) {
   // eslint-disable-next-line react-hooks/exhaustive-deps -- This wrapper intentionally models mount/unmount lifecycle only.
-  useEffect(effect, [])
+  useEffect(effect, []);
 }
 
-export default useMountEffect
+export default useMountEffect;

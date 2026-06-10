@@ -74,7 +74,9 @@ async function resolveCloudflareContext(): Promise<LocalCloudflareContext> {
   // Node process where that context was never initialized, so fall back to the
   // same local proxy `migrate`/`generate` use.
   try {
-    return (await getCloudflareContext({ async: true })) as RuntimeCloudflareContext;
+    return (await getCloudflareContext({
+      async: true,
+    })) as RuntimeCloudflareContext;
   } catch {
     return getCloudflareContextFromWrangler();
   }
