@@ -12,11 +12,11 @@ import "dotenv/config";
 export default defineConfig({
   testDir: "./tests/e2e",
   /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
+  forbidOnly: !!process.env["CI"],
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env["CI"] ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  ...(process.env.CI ? { workers: 1 } : {}),
+  ...(process.env["CI"] ? { workers: 1 } : {}),
   /* Reporter to use. See https://playwright.dev/docs/test-reporters
    * `list` gives live console output (useful in Docker/CI), `html` saves a
    * report. `open: 'never'` stops it launching a browser, which would hang in a
