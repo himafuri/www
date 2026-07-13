@@ -2,8 +2,9 @@ import type { ReactNode } from "react";
 import "./styles.css";
 
 export const metadata = {
-  description: "A blank template using Payload in a Next.js app.",
-  title: "Payload Blank Template",
+  description:
+    "Website Resmi Himpunan Mahasiswa Furry Indonesia — Persekutuan Mahasiswa Furry Indonesia dari berbagai macam perguruan tinggi.",
+  title: "HIMAFURI",
 };
 
 interface RootLayoutProps {
@@ -14,10 +15,8 @@ export default function RootLayout(props: RootLayoutProps) {
   const { children } = props;
 
   return (
-    <html lang="en">
-      <body>
-        <main>{children}</main>
-      </body>
+    <html lang="id">
+      <body>{children}</body>
     </html>
   );
 }
