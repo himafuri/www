@@ -30,6 +30,7 @@
   --radius: 0.75rem;
   --navbar: #247cc0;
   --footer: #151e28;
+  --footer-foreground: #8fa0b5;
   --font-sans: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible Next", system-ui, -apple-system, sans-serif;
   --font-heading: "Jost Variable", "Jost", system-ui, -apple-system, sans-serif;
 }
@@ -57,6 +58,7 @@
   --ring: #247cc0;
   --navbar: #247cc0;
   --footer: #1c232a;
+  --footer-foreground: #8fa0b5;
 }
 
 @theme inline {
@@ -83,6 +85,7 @@
   --color-ring: var(--ring);
   --color-navbar: var(--navbar);
   --color-footer: var(--footer);
+  --color-footer-foreground: var(--footer-foreground);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);

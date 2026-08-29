@@ -283,7 +283,7 @@ export default function HomePage() {
               <p className="font-heading mb-1 font-bold text-white">
                 Himpunan Mahasiswa Furry Indonesia
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-footer-foreground">
                 © 2026 Himpunan Mahasiswa Furry Indonesia
               </p>
             </div>
@@ -293,7 +293,7 @@ export default function HomePage() {
             <h3 className="font-heading mb-3 text-sm font-bold text-white">
               Panduan
             </h3>
-            <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
+            <ul className="flex flex-col gap-2 text-sm text-footer-foreground">
               <li>
                 <a href="#top" className="transition-colors hover:text-white">
                   Komunitas
@@ -316,7 +316,7 @@ export default function HomePage() {
             <h3 className="font-heading mb-3 text-sm font-bold text-white">
               Media Sosial
             </h3>
-            <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
+            <ul className="flex flex-col gap-2 text-sm text-footer-foreground">
               <li>
                 <a
                   href="https://discord.com"
@@ -345,7 +345,7 @@ export default function HomePage() {
 
         <div className="mx-auto my-8 max-w-6xl border-t border-white/10" />
 
-        <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-3 text-sm text-muted-foreground max-[860px]:flex-col max-[860px]:items-start">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-3 text-sm text-footer-foreground max-[860px]:flex-col max-[860px]:items-start">
           <p className="max-w-[640px]">
             &ldquo;Pengaruh pengajaran itu umumnya memerdekakan manusia atas
             hidupnya lahir, sedang merdekanya hidup batin terdapat dari
