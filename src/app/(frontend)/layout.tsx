@@ -11,11 +11,16 @@ interface RootLayoutProps {
   children: ReactNode;
 }
 
+const themeScript = `try{if(localStorage.theme==='dark'||(!('theme' in localStorage)&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(_){}`;
+
 export default function RootLayout(props: RootLayoutProps) {
   const { children } = props;
 
   return (
-    <html lang="id">
+    <html lang="id" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );
