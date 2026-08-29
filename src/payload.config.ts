@@ -56,8 +56,7 @@ type RuntimeCloudflareContext = Omit<CloudflareContext, "env"> & {
 };
 
 type LocalCloudflareContext =
-  | RuntimeCloudflareContext
-  | PlatformProxy<LocalCloudflareEnv>;
+  RuntimeCloudflareContext | PlatformProxy<LocalCloudflareEnv>;
 
 type WranglerPlatformProxyModule = Pick<
   typeof import("wrangler"),
