@@ -1,5 +1,4 @@
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
-import nextTypescript from "eslint-config-next/typescript";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -77,8 +76,7 @@ const effectHookRestrictionRules = {
 };
 
 const eslintConfig = tseslint.config(
-  ...nextCoreWebVitals,
-  ...nextTypescript,
+  ...nextCoreWebVitals.filter((config) => config.name !== "next/typescript"),
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   youMightNotNeedAnEffect.configs.strict,

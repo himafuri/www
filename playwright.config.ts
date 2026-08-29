@@ -18,9 +18,9 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   ...(process.env["CI"] ? { workers: 1 } : {}),
   /* Reporter to use. See https://playwright.dev/docs/test-reporters
-   * `list` gives live console output (useful in Docker/CI), `html` saves a
+   * `list` gives live console output (useful in CI), `html` saves a
    * report. `open: 'never'` stops it launching a browser, which would hang in a
-   * headless container. */
+   * headless environment. */
   reporter: [["list"], ["html", { open: "never" }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -40,7 +40,7 @@ export default defineConfig({
     command: "pnpm dev",
     reuseExistingServer: true,
     url: "http://localhost:3000",
-    /* First compile of the Payload admin in a cold container is slow. */
+    /* First compile of the Payload admin is slow. */
     timeout: 180_000,
   },
 });
