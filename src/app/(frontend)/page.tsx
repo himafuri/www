@@ -260,7 +260,6 @@ export default function HomePage() {
           <Accordion
             type="single"
             collapsible
-            defaultValue="item-0"
             className="mx-auto flex max-w-3xl flex-col gap-3"
           >
             {faqItems.map((item, index) => (
