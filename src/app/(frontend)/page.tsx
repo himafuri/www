@@ -98,16 +98,16 @@ export default function HomePage() {
             <div className="flex items-center gap-1.5">
               {/* Language Switcher */}
               <div
-                className="flex items-center overflow-hidden rounded-full border border-white/60 p-0.5"
+                className="inline-flex items-stretch overflow-hidden rounded-md border border-black/15 bg-black/25 shadow-xs"
                 role="group"
                 aria-label="Pilih bahasa"
               >
                 <button
                   type="button"
-                  className={`cursor-pointer rounded-full px-3 py-0.5 text-xs font-bold transition-all ${
+                  className={`cursor-pointer px-2.5 py-1 text-xs font-bold tracking-wide transition-colors ${
                     lang === "ID"
-                      ? "bg-white text-navbar shadow-sm"
-                      : "bg-transparent text-white hover:text-white/80"
+                      ? "bg-white text-navbar shadow-xs"
+                      : "bg-transparent text-white/80 hover:bg-black/15 hover:text-white"
                   }`}
                   onClick={() => {
                     setLang("ID");
@@ -117,10 +117,10 @@ export default function HomePage() {
                 </button>
                 <button
                   type="button"
-                  className={`cursor-pointer rounded-full px-3 py-0.5 text-xs font-bold transition-all ${
+                  className={`cursor-pointer px-2.5 py-1 text-xs font-bold tracking-wide transition-colors ${
                     lang === "EN"
-                      ? "bg-white text-navbar shadow-sm"
-                      : "bg-transparent text-white hover:text-white/80"
+                      ? "bg-white text-navbar shadow-xs"
+                      : "bg-transparent text-white/80 hover:bg-black/15 hover:text-white"
                   }`}
                   onClick={() => {
                     setLang("EN");
@@ -134,10 +134,10 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={toggleTheme}
-                className="cursor-pointer rounded-full p-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                className="flex cursor-pointer items-center justify-center rounded-md border border-black/15 bg-black/25 p-1 text-white/80 shadow-xs transition-colors hover:bg-black/35 hover:text-white"
                 aria-label={theme === "dark" ? "Ganti ke mode terang" : "Ganti ke mode gelap"}
               >
-                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
               </button>
             </div>
           </div>
