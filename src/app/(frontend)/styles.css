@@ -19,7 +19,7 @@
   --secondary: #e8f2fa;
   --secondary-foreground: #164e78;
   --muted: #e4edf5;
-  --muted-foreground: #3d4a5a;
+  --muted-foreground: #374554;
   --accent: #247cc0;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
@@ -31,7 +31,9 @@
   --navbar: #247cc0;
   --footer: #151e28;
   --footer-foreground: #8fa0b5;
-  --font-sans: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible Next", system-ui, -apple-system, sans-serif;
+  --font-sans:
+    "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible Next",
+    system-ui, -apple-system, sans-serif;
   --font-heading: "Jost Variable", "Jost", system-ui, -apple-system, sans-serif;
 }
 

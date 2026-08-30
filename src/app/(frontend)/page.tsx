@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+
 import { Moon, Sun } from "lucide-react";
-import useMountEffect from "@/hooks/useMountEffect";
+import Image from "next/image";
 
 import {
   Accordion,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import useMountEffect from "@/hooks/useMountEffect";
 import { SiDiscord, SiInstagram } from "@icons-pack/react-simple-icons";
 
 const faqItems = [
@@ -105,9 +106,9 @@ export default function HomePage() {
                 <button
                   type="button"
                   className={`cursor-pointer px-2.5 py-1 text-xs font-bold tracking-wide transition-colors ${
-                    lang === "ID"
-                      ? "bg-white text-navbar shadow-xs"
-                      : "bg-transparent text-white/80 hover:bg-black/15 hover:text-white"
+                    lang === "ID" ?
+                      "bg-white text-navbar shadow-xs"
+                    : "bg-transparent text-white/80 hover:bg-black/15 hover:text-white"
                   }`}
                   onClick={() => {
                     setLang("ID");
@@ -118,9 +119,9 @@ export default function HomePage() {
                 <button
                   type="button"
                   className={`cursor-pointer px-2.5 py-1 text-xs font-bold tracking-wide transition-colors ${
-                    lang === "EN"
-                      ? "bg-white text-navbar shadow-xs"
-                      : "bg-transparent text-white/80 hover:bg-black/15 hover:text-white"
+                    lang === "EN" ?
+                      "bg-white text-navbar shadow-xs"
+                    : "bg-transparent text-white/80 hover:bg-black/15 hover:text-white"
                   }`}
                   onClick={() => {
                     setLang("EN");
@@ -135,9 +136,15 @@ export default function HomePage() {
                 type="button"
                 onClick={toggleTheme}
                 className="flex cursor-pointer items-center justify-center rounded-md border border-black/15 bg-black/25 p-1 text-white/80 shadow-xs transition-colors hover:bg-black/35 hover:text-white"
-                aria-label={theme === "dark" ? "Ganti ke mode terang" : "Ganti ke mode gelap"}
+                aria-label={
+                  theme === "dark" ?
+                    "Ganti ke mode terang"
+                  : "Ganti ke mode gelap"
+                }
               >
-                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                {theme === "dark" ?
+                  <Sun size={16} />
+                : <Moon size={16} />}
               </button>
             </div>
           </div>
@@ -146,7 +153,7 @@ export default function HomePage() {
 
       <main id="top">
         {/* ===== Hero ===== */}
-        <section className="relative flex min-h-[520px] items-center overflow-hidden py-12 md:py-16">
+        <section className="relative flex min-h-130 items-center overflow-hidden py-12 md:py-16">
           <Image
             src="/himafuribanner.jpg"
             alt="Anggota komunitas HIMAFURI berkumpul"
@@ -155,10 +162,10 @@ export default function HomePage() {
             className="z-0 object-cover opacity-75"
             sizes="100vw"
           />
-          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-background/30 via-background/60 to-background" />
+          <div className="absolute inset-0 z-1 bg-linear-to-b from-background/30 via-background/60 to-background" />
 
-          <div className="relative z-[2] mx-auto flex max-w-6xl w-full flex-col items-center gap-8 px-6 md:flex-row md:items-center md:gap-12">
-            <div className="flex h-[195px] w-[198px] shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-[0_16px_35px_rgba(36,124,192,0.2)] ring-4 ring-white/30 dark:ring-white/10">
+          <div className="relative z-2 mx-auto flex max-w-6xl w-full flex-col items-center gap-8 px-6 md:flex-row md:items-center md:gap-12">
+            <div className="flex h-48.75 w-49.5 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-[0_16px_35px_rgba(36,124,192,0.2)] ring-4 ring-white/30 dark:ring-white/10">
               <Image
                 src="/mascot-placeholder.png"
                 alt="Placeholder maskot HIMAFURI"
@@ -168,11 +175,11 @@ export default function HomePage() {
               />
             </div>
 
-            <div className="max-w-[640px] text-center md:text-left">
+            <div className="max-w-3xl text-center md:text-left">
               <h1 className="font-heading mb-3 text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
                 Himpunan Mahasiswa Furry Indonesia
               </h1>
-              <p className="mb-6 text-base text-muted-foreground sm:text-lg">
+              <p className="mb-6 text-base font-medium text-pretty text-muted-foreground sm:text-lg lg:whitespace-nowrap">
                 Persekutuan Mahasiswa Furry Indonesia dari berbagai macam
                 perguruan tinggi.
               </p>
@@ -259,9 +266,9 @@ export default function HomePage() {
             {faqItems.map((item, index) => (
               <AccordionItem key={index} value={`item-${String(index)}`}>
                 <AccordionTrigger>{item.question}</AccordionTrigger>
-                {item.answer ? (
+                {item.answer ?
                   <AccordionContent>{item.answer}</AccordionContent>
-                ) : null}
+                : null}
               </AccordionItem>
             ))}
           </Accordion>
@@ -271,7 +278,7 @@ export default function HomePage() {
       {/* ===== Footer ===== */}
       <footer className="bg-footer px-6 pt-14 pb-10">
         <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-8">
-          <div className="flex max-w-[360px] items-start gap-4">
+          <div className="flex max-w-90 items-start gap-4">
             <Image
               src="/himafurilogo.png"
               alt="Logo HIMAFURI"
@@ -289,7 +296,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <nav className="min-w-[160px]">
+          <nav className="min-w-40">
             <h3 className="font-heading mb-3 text-sm font-bold text-white">
               Panduan
             </h3>
@@ -312,7 +319,7 @@ export default function HomePage() {
             </ul>
           </nav>
 
-          <nav className="min-w-[160px]">
+          <nav className="min-w-40">
             <h3 className="font-heading mb-3 text-sm font-bold text-white">
               Media Sosial
             </h3>
@@ -346,7 +353,7 @@ export default function HomePage() {
         <div className="mx-auto my-8 max-w-6xl border-t border-white/10" />
 
         <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-3 text-sm text-footer-foreground max-[860px]:flex-col max-[860px]:items-start">
-          <p className="max-w-[640px]">
+          <p className="max-w-160">
             &ldquo;Pengaruh pengajaran itu umumnya memerdekakan manusia atas
             hidupnya lahir, sedang merdekanya hidup batin terdapat dari
             pendidikan.&rdquo;
