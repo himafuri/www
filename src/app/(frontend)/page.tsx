@@ -1,7 +1,20 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+
+import { Moon, Sun } from "lucide-react";
+import Image from "next/image";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import useMountEffect from "@/hooks/useMountEffect";
+import { SiDiscord, SiInstagram } from "@icons-pack/react-simple-icons";
 
 const faqItems = [
   {
@@ -16,96 +29,122 @@ const faqItems = [
 ];
 
 export default function HomePage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [lang, setLang] = useState<"ID" | "EN">("ID");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
-  function toggleFaq(index: number) {
-    setOpenIndex((current) => (current === index ? null : index));
-  }
+  useMountEffect(() => {
+    const isDark =
+      document.documentElement.classList.contains("dark") ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      setTheme("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      setTheme("light");
+    }
+  });
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "light" ? "dark" : "light";
+    setTheme(nextTheme);
+    if (nextTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   return (
     <>
       {/* ===== Navbar ===== */}
-      <header className="navbar">
-        <div className="navbar__inner">
-          <a
-            className="navbar__brand"
-            href="#top"
-            aria-label="HIMAFURI beranda"
-          >
+      <header className="sticky top-0 z-50 bg-navbar shadow-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+          <a href="#top" aria-label="HIMAFURI beranda">
             <Image
               src="/himafurilogo.png"
               alt="Logo HIMAFURI"
               width={36}
               height={36}
               priority
+              className="rounded-full"
             />
           </a>
 
-          <div className="navbar__actions">
-            <a
-              className="navbar__icon"
-              href="https://discord.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Discord HIMAFURI"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="currentColor"
-                aria-hidden="true"
+          <div className="flex items-center gap-5 sm:gap-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <a
+                className="flex items-center justify-center text-white/90 transition-opacity hover:opacity-100"
+                href="https://discord.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Discord HIMAFURI"
               >
-                <path d="M20.317 4.369A19.79 19.79 0 0 0 15.885 3c-.21.375-.444.875-.608 1.273a18.27 18.27 0 0 0-5.556 0A12.6 12.6 0 0 0 9.11 3a19.74 19.74 0 0 0-4.435 1.37C1.578 8.29.865 12.1 1.22 15.86a19.9 19.9 0 0 0 5.993 3.03c.484-.66.914-1.363 1.284-2.104a12.9 12.9 0 0 1-2.022-.98c.17-.124.336-.253.497-.386 3.9 1.81 8.13 1.81 11.98 0 .162.133.328.262.497.386-.645.386-1.324.71-2.026.982.37.74.8 1.443 1.284 2.103a19.83 19.83 0 0 0 6-3.03c.42-4.36-.68-8.13-2.902-11.49ZM8.68 13.55c-1.17 0-2.13-1.07-2.13-2.39 0-1.31.94-2.39 2.13-2.39 1.19 0 2.15 1.08 2.13 2.39 0 1.32-.94 2.39-2.13 2.39Zm6.64 0c-1.17 0-2.13-1.07-2.13-2.39 0-1.31.94-2.39 2.13-2.39 1.19 0 2.15 1.08 2.13 2.39 0 1.32-.93 2.39-2.13 2.39Z" />
-              </svg>
-            </a>
-            <a
-              className="navbar__icon"
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram HIMAFURI"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                aria-hidden="true"
+                <SiDiscord size={20} />
+              </a>
+              <a
+                className="flex items-center justify-center text-white/90 transition-opacity hover:opacity-100"
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram HIMAFURI"
               >
-                <rect x="3" y="3" width="18" height="18" rx="5" />
-                <circle cx="12" cy="12" r="4" />
-                <circle
-                  cx="17.2"
-                  cy="6.8"
-                  r="0.9"
-                  fill="currentColor"
-                  stroke="none"
-                />
-              </svg>
-            </a>
+                <SiInstagram size={20} />
+              </a>
+            </div>
 
-            <div className="lang-toggle" role="group" aria-label="Pilih bahasa">
+            <div className="flex items-center gap-1.5">
+              {/* Language Switcher */}
+              <div
+                className="inline-flex items-stretch overflow-hidden rounded-md border border-black/15 bg-black/25 shadow-xs"
+                role="group"
+                aria-label="Pilih bahasa"
+              >
+                <button
+                  type="button"
+                  className={`cursor-pointer px-2.5 py-1 text-xs font-bold tracking-wide transition-colors ${
+                    lang === "ID" ?
+                      "bg-white text-navbar shadow-xs"
+                    : "bg-transparent text-white/80 hover:bg-black/15 hover:text-white"
+                  }`}
+                  onClick={() => {
+                    setLang("ID");
+                  }}
+                >
+                  ID
+                </button>
+                <button
+                  type="button"
+                  className={`cursor-pointer px-2.5 py-1 text-xs font-bold tracking-wide transition-colors ${
+                    lang === "EN" ?
+                      "bg-white text-navbar shadow-xs"
+                    : "bg-transparent text-white/80 hover:bg-black/15 hover:text-white"
+                  }`}
+                  onClick={() => {
+                    setLang("EN");
+                  }}
+                >
+                  EN
+                </button>
+              </div>
+
+              {/* Theme Toggle */}
               <button
                 type="button"
-                className={`lang-toggle__btn ${lang === "ID" ? "is-active" : ""}`}
-                onClick={() => {
-                  setLang("ID");
-                }}
+                onClick={toggleTheme}
+                className="flex cursor-pointer items-center justify-center rounded-md border border-black/15 bg-black/25 p-1 text-white/80 shadow-xs transition-colors hover:bg-black/35 hover:text-white"
+                aria-label={
+                  theme === "dark" ?
+                    "Ganti ke mode terang"
+                  : "Ganti ke mode gelap"
+                }
               >
-                ID
-              </button>
-              <button
-                type="button"
-                className={`lang-toggle__btn ${lang === "EN" ? "is-active" : ""}`}
-                onClick={() => {
-                  setLang("EN");
-                }}
-              >
-                EN
+                {theme === "dark" ?
+                  <Sun size={16} />
+                : <Moon size={16} />}
               </button>
             </div>
           </div>
@@ -114,188 +153,213 @@ export default function HomePage() {
 
       <main id="top">
         {/* ===== Hero ===== */}
-        <section className="hero">
+        <section className="relative flex min-h-130 items-center overflow-hidden py-12 md:py-16">
           <Image
             src="/himafuribanner.jpg"
             alt="Anggota komunitas HIMAFURI berkumpul"
             fill
             priority
-            className="hero__bg"
+            className="z-0 object-cover opacity-75"
             sizes="100vw"
           />
-          <div className="hero__overlay" />
+          <div className="absolute inset-0 z-1 bg-linear-to-b from-background/30 via-background/60 to-background" />
 
-          <div className="hero__inner">
-            <div className="hero__mascot">
+          <div className="relative z-2 mx-auto flex max-w-6xl w-full flex-col items-center gap-8 px-6 md:flex-row md:items-center md:gap-12">
+            <div className="flex h-48.75 w-49.5 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-[0_16px_35px_rgba(36,124,192,0.2)] ring-4 ring-white/30 dark:ring-white/10">
               <Image
                 src="/mascot-placeholder.png"
                 alt="Placeholder maskot HIMAFURI"
                 width={198}
                 height={195}
+                className="object-contain"
               />
             </div>
 
-            <div className="hero__content">
-              <h1>Himpunan Mahasiswa Furry Indonesia</h1>
-              <p className="hero__lead">
+            <div className="max-w-3xl text-center md:text-left">
+              <h1 className="font-heading mb-3 text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
+                Himpunan Mahasiswa Furry Indonesia
+              </h1>
+              <p className="mb-6 text-base font-medium text-pretty text-muted-foreground sm:text-lg lg:whitespace-nowrap">
                 Persekutuan Mahasiswa Furry Indonesia dari berbagai macam
                 perguruan tinggi.
               </p>
 
-              <div className="hero__stats">
-                <div className="stat">
-                  <span className="stat__number">500+</span>
-                  <span className="stat__label">Anggota Komunitas</span>
+              <div className="mb-6 flex flex-wrap justify-center gap-4 sm:gap-6 md:justify-start">
+                <div className="flex flex-col rounded-xl border border-border bg-card/80 px-4 py-2 shadow-xs backdrop-blur-xs">
+                  <span className="font-heading text-2xl font-extrabold text-foreground sm:text-3xl">
+                    500+
+                  </span>
+                  <span className="text-xs font-medium text-muted-foreground sm:text-sm">
+                    Anggota Komunitas
+                  </span>
                 </div>
-                <div className="stat">
-                  <span className="stat__number">130+</span>
-                  <span className="stat__label">Institusi Terdaftar</span>
+                <div className="flex flex-col rounded-xl border border-border bg-card/80 px-4 py-2 shadow-xs backdrop-blur-xs">
+                  <span className="font-heading text-2xl font-extrabold text-foreground sm:text-3xl">
+                    130+
+                  </span>
+                  <span className="text-xs font-medium text-muted-foreground sm:text-sm">
+                    Institusi Terdaftar
+                  </span>
                 </div>
               </div>
 
-              <a
-                className="btn btn--primary"
-                href="https://discord.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Button
+                asChild
+                size="lg"
+                className="h-auto rounded-lg bg-primary px-6 py-3 text-base font-semibold text-white shadow-lg transition-all hover:bg-primary/90 active:translate-y-0.5"
               >
-                Gabung ke Discord
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== Visi & Misi ===== */}
-        <section className="vision-mission">
-          <div className="card">
-            <h2>Visi</h2>
-            <p>
-              Merangkul mahasiswa-mahasiswa Perguruan Tinggi di Indonesia yang
-              memiliki ketertarikan terhadap komunitas furry.
-            </p>
-          </div>
-          <div className="card">
-            <h2>Misi</h2>
-            <p>
-              Melakukan segala kegiatan HIMAFURI terutama dalam mencari
-              mahasiswa-mahasiswa yang tersebar di berbagai Perguruan Tinggi di
-              Indonesia secara konsisten untuk mencapai Visi HIMAFURI.
-            </p>
-          </div>
-        </section>
-
-        {/* ===== FAQ ===== */}
-        <section className="faq">
-          <h2 className="faq__title">Pertanyaan Yang Sering Ditanyakan</h2>
-
-          <div className="faq__list">
-            {faqItems.map((item, index) => {
-              const isOpen = openIndex === index;
-              return (
-                <div className="faq__item" key={index}>
-                  <button
-                    type="button"
-                    className="faq__question"
-                    aria-expanded={isOpen}
-                    onClick={() => {
-                      toggleFaq(index);
-                    }}
-                  >
-                    <span>{item.question}</span>
-                    <svg
-                      className={`faq__chevron ${isOpen ? "is-open" : ""}`}
-                      viewBox="0 0 24 24"
-                      width="18"
-                      height="18"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      aria-hidden="true"
-                    >
-                      <path d="M6 9l6 6 6-6" />
-                    </svg>
-                  </button>
-                  {isOpen && item.answer && (
-                    <div className="faq__answer">
-                      <p>{item.answer}</p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      </main>
-
-      {/* ===== Footer ===== */}
-      <footer className="footer">
-        <div className="footer__top">
-          <div className="footer__brand">
-            <Image
-              src="/himafurilogo.png"
-              alt="Logo HIMAFURI"
-              width={48}
-              height={48}
-            />
-            <div>
-              <p className="footer__brand-name">
-                Himpunan Mahasiswa Furry Indonesia
-              </p>
-              <p className="footer__copyright">
-                © 2026 Himpunan Mahasiswa Furry Indonesia
-              </p>
-            </div>
-          </div>
-
-          <nav className="footer__col">
-            <h3>Panduan</h3>
-            <ul>
-              <li>
-                <a href="#top">Komunitas</a>
-              </li>
-              <li>
-                <a href="#top">Peraturan &amp; Tata Tertib</a>
-              </li>
-              <li>
-                <a href="#top">Tautan Penting</a>
-              </li>
-            </ul>
-          </nav>
-
-          <nav className="footer__col">
-            <h3>Media Sosial</h3>
-            <ul>
-              <li>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Instagram
-                </a>
-              </li>
-              <li>
                 <a
                   href="https://discord.com"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Gabung ke Discord Kami
+                  Gabung ke Discord HIMAFURI
+                </a>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== Visi & Misi ===== */}
+        <section className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 py-12 md:grid-cols-2">
+          <Card className="rounded-2xl border border-border bg-card p-6 shadow-xs transition-shadow hover:shadow-md">
+            <CardHeader className="p-0 pb-3">
+              <CardTitle className="font-heading text-2xl font-bold text-card-foreground">
+                Visi
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <p className="text-base leading-relaxed text-muted-foreground">
+                Merangkul mahasiswa-mahasiswa Perguruan Tinggi di Indonesia yang
+                memiliki ketertarikan terhadap komunitas furry.
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="rounded-2xl border border-border bg-card p-6 shadow-xs transition-shadow hover:shadow-md">
+            <CardHeader className="p-0 pb-3">
+              <CardTitle className="font-heading text-2xl font-bold text-card-foreground">
+                Misi
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <p className="text-base leading-relaxed text-muted-foreground">
+                Melakukan segala kegiatan HIMAFURI terutama dalam mencari
+                mahasiswa-mahasiswa yang tersebar di berbagai Perguruan Tinggi
+                di Indonesia secara konsisten untuk mencapai Visi HIMAFURI.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* ===== FAQ ===== */}
+        <section className="mx-auto max-w-6xl px-6 pt-4 pb-16">
+          <h2 className="font-heading mb-8 text-center text-2xl font-bold text-foreground sm:text-3xl">
+            Pertanyaan Yang Sering Ditanyakan
+          </h2>
+
+          <Accordion
+            type="single"
+            collapsible
+            className="mx-auto flex max-w-3xl flex-col gap-3"
+          >
+            {faqItems.map((item, index) => (
+              <AccordionItem key={index} value={`item-${String(index)}`}>
+                <AccordionTrigger>{item.question}</AccordionTrigger>
+                {item.answer ?
+                  <AccordionContent>{item.answer}</AccordionContent>
+                : null}
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </section>
+      </main>
+
+      {/* ===== Footer ===== */}
+      <footer className="bg-footer px-6 pt-14 pb-10">
+        <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-8">
+          <div className="flex max-w-90 items-start gap-4">
+            <Image
+              src="/himafurilogo.png"
+              alt="Logo HIMAFURI"
+              width={48}
+              height={48}
+              className="rounded-full"
+            />
+            <div>
+              <p className="font-heading mb-1 font-bold text-white">
+                Himpunan Mahasiswa Furry Indonesia
+              </p>
+              <p className="text-xs text-footer-foreground">
+                © 2026 Himpunan Mahasiswa Furry Indonesia
+              </p>
+            </div>
+          </div>
+
+          <nav className="min-w-40">
+            <h3 className="font-heading mb-3 text-sm font-bold text-white">
+              Panduan
+            </h3>
+            <ul className="flex flex-col gap-2 text-sm text-footer-foreground">
+              <li>
+                <a href="#top" className="transition-colors hover:text-white">
+                  Komunitas
+                </a>
+              </li>
+              <li>
+                <a href="#top" className="transition-colors hover:text-white">
+                  Peraturan &amp; Tata Tertib
+                </a>
+              </li>
+              <li>
+                <a href="#top" className="transition-colors hover:text-white">
+                  Tautan Penting
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <nav className="min-w-40">
+            <h3 className="font-heading mb-3 text-sm font-bold text-white">
+              Media Sosial
+            </h3>
+            <ul className="flex flex-col gap-2 text-sm text-footer-foreground">
+              <li>
+                <a
+                  href="https://discord.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 transition-colors hover:text-white"
+                >
+                  <SiDiscord size={16} />
+                  <span>Discord</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 transition-colors hover:text-white"
+                >
+                  <SiInstagram size={16} />
+                  <span>Instagram</span>
                 </a>
               </li>
             </ul>
           </nav>
         </div>
 
-        <div className="footer__divider" />
+        <div className="mx-auto my-8 max-w-6xl border-t border-white/10" />
 
-        <div className="footer__quote">
-          <p>
-            &ldquo;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-            do eiusmod tempor incididunt ut labore et dolore magna
-            aliqua.&rdquo;
+        <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-3 text-sm text-footer-foreground max-[860px]:flex-col max-[860px]:items-start">
+          <p className="max-w-160">
+            &ldquo;Pengaruh pengajaran itu umumnya memerdekakan manusia atas
+            hidupnya lahir, sedang merdekanya hidup batin terdapat dari
+            pendidikan.&rdquo;
           </p>
-          <span>- John &ldquo;Furdough&rdquo; Doe</span>
+          <span className="italic whitespace-nowrap">
+            &mdash; Ki Hajar Dewantara
+          </span>
         </div>
       </footer>
     </>

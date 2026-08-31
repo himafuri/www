@@ -155,6 +155,7 @@ const eslintConfig = tseslint.config(
     ignores: [
       ".next/",
       "eslint.config.mjs",
+      "postcss.config.mjs",
       "src/app/**/admin/**/*.js",
       "src/app/**/admin/**/*.ts",
       "src/app/**/admin/**/*.tsx",
