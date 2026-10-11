@@ -1,90 +1,87 @@
-# www (HIMAFURI's official website)
+# Run and edit the HIMAFURI website
 
-A [Payload CMS](https://payloadcms.com) 3.x project (Next.js 16) that runs on Cloudflare Workers, backed by a Cloudflare D1 (SQLite) database.
+Use this guide to run the HIMAFURI site locally and edit its homepage through EmDash 1.2. Astro renders public pages on the server without React components or hydration. EmDash uses React for its admin panel.
 
-## Local development setup
+## Run locally
 
-Prerequisites: **Node.js** (>= 20.9.0, Node 24 recommended) and **pnpm** (>= 9).
+Use Node.js 22.16 or newer and pnpm 9 or newer.
 
-### 1. Clone the repo & install dependencies
+1. Install the dependencies:
 
-```bash
-git clone <repo-url>
-cd www
-pnpm install
-```
+   ```sh
+   pnpm install
+   ```
 
-### 2. Create your local env files
+2. Generate the local encryption key. If `.env` already contains `EMDASH_ENCRYPTION_KEY`, keep that key and skip this command:
 
-These files hold your local `PAYLOAD_SECRET` and are gitignored, so every contributor creates their own. Generate a secret and write both files in one go.
+   ```sh
+   pnpm exec emdash secrets generate --write .env
+   ```
 
-**macOS / Linux (bash, Git Bash, or WSL):**
+3. Start the development server:
 
-```bash
-SECRET=$(openssl rand -hex 32)
-echo "PAYLOAD_SECRET=$SECRET" > .env
-printf "NEXTJS_ENV=development\nPAYLOAD_SECRET=%s\n" "$SECRET" > .dev.vars
-```
+   ```sh
+   pnpm dev
+   ```
 
-**Windows (PowerShell):**
+Keep `.env` private. EmDash stores the local database in `data/emdash.db` and uploaded media in `uploads/`. Git ignores both paths.
 
-```powershell
-$SECRET = -join ((1..32) | ForEach-Object { '{0:x2}' -f (Get-Random -Maximum 256) })
-"PAYLOAD_SECRET=$SECRET" | Out-File -FilePath .env -Encoding ascii
-"NEXTJS_ENV=development`nPAYLOAD_SECRET=$SECRET" | Out-File -FilePath .dev.vars -Encoding ascii
-```
+`pnpm dev` seeds the original homepage into the local database, then starts the [local site](http://localhost:4321/). Seeding skips existing content, so restarting development preserves edits.
 
-`.env` is loaded for the Next.js dev server. `.dev.vars` is used when running `pnpm preview` (the Cloudflare Workers build). The secret just needs to be a long random string for local use.
+Astro may run the development server in the background when an agent starts it. Use these commands to manage that server:
 
-### 3. Start the app
+- `pnpm exec astro dev status` checks the server status.
+- `pnpm exec astro dev logs` shows the server logs.
+- `pnpm exec astro dev stop` stops the server.
 
-```bash
+Open the [EmDash admin](http://localhost:4321/_emdash/admin/) and finish the setup wizard with your own name, email, and passkey. Keep the default **Sample content** choice to use the existing HIMAFURI homepage. The old `/admin` address redirects to EmDash.
+
+## Restart after an editor save error
+
+If an editor save reports `Vite module runner has been closed`, restart Astro. This error can follow a configuration or dependency reload:
+
+```sh
+pnpm exec astro dev stop
 pnpm dev
 ```
 
-Once you see `Ready`, open:
+## Edit the homepage
 
-```txt
-http://localhost:3000/admin
-```
+Open **Beranda** in the admin and edit its existing homepage entry. You can edit these fields:
 
-Follow the on-screen prompt to create your first admin user. Edits under `./src` hot-reload automatically.
+- Page title and search description
+- Community name, introduction, Discord button, and social links
+- Logo, banner, and mascot
+- Community statistics, vision, mission, and frequently asked questions, or FAQs
+- Footer headings, guide links, copyright, and quotation
 
-There is no separate database to install or run. The Cloudflare D1 database runs locally through wrangler, and its schema is stored in `.wrangler/` (gitignored). Delete that folder if you ever want a fresh database.
+Replace images through the media picker and set their alt text.
 
-### Common scripts
+Choose **Save** to create a draft and **Preview** to inspect it. Choose **Publish** to make the draft public, then refresh the homepage to see the changes. Server rendering shows published edits without a rebuild.
 
-```bash
-pnpm dev             # start dev server
-pnpm build           # build Next.js production bundle
-pnpm lint            # run ESLint
-pnpm format          # format files with Prettier
-pnpm test            # run integration + e2e tests
-pnpm test:int        # run integration tests (vitest)
-pnpm test:e2e        # run e2e tests (playwright)
-pnpm generate:types  # generate Payload TypeScript types
-pnpm generate:importmap # generate Payload admin import map
-```
+The migration preserved the placeholder FAQ answers, mascot, generic Discord and Instagram links, and guide anchors. The source had no English copy, so **EN** stays disabled until you add translations.
 
-## How it works
+## Run project commands
 
-### Collections
+Use these commands from the repository root:
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for how to extend these.
+| Command            | Action                                                               |
+| ------------------ | -------------------------------------------------------------------- |
+| `pnpm dev`         | Seed missing content and start the local site                        |
+| `pnpm setup:local` | Seed the missing content model and content without overwriting edits |
+| `pnpm check`       | Generate Astro and EmDash types and check the source                 |
+| `pnpm build`       | Check types and build the Node server                                |
+| `pnpm preview`     | Preview the production build locally                                 |
+| `pnpm test`        | Run public-page browser checks                                       |
 
-- **Users** (authentication): an auth-enabled collection whose members can access the admin panel. See the [Authentication docs](https://payloadcms.com/docs/authentication/overview).
-- **Media**: an uploads-enabled collection with preconfigured image sizes and focal point support.
+If Playwright's Chromium is missing, run `pnpm exec playwright install chromium` before tests.
 
-## Deploying to Cloudflare
+The source seed is `.emdash/seed.json`. EmDash generates `emdash-env.d.ts` from its database model, so leave that file unchanged. On a fresh checkout, run `pnpm setup:local` before checks or builds to create the model. `pnpm dev` runs that command automatically.
 
-This app deploys to Cloudflare Workers via [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare). The high-level flow:
+### Prepare for a later deployment
 
-1. `wrangler login` (or set `CLOUDFLARE_API_TOKEN`).
-2. `wrangler d1 create www-db`, then paste the returned `database_id` into `wrangler.jsonc`.
-3. `wrangler secret put PAYLOAD_SECRET` to set the production secret.
-4. Generate migrations with `pnpm payload migrate:create`, then uncomment the `prodMigrations` line in `src/payload.config.ts` so they run on the worker's cold start.
-5. `pnpm deploy`.
+This preview uses Node.js, SQLite, and local media storage. After owner review, Cloudflare deployment requires:
 
-## Questions
-
-Start a [GitHub discussion](https://github.com/payloadcms/payload/discussions), or ask in the [Payload Discord](https://discord.com/invite/payload).
+- An Astro Cloudflare adapter
+- EmDash database and media storage configuration
+- A planned transfer of content and media to production
