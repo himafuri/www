@@ -1,0 +1,342 @@
+---
+import { getEmDashEntry, sanitizeHref } from "emdash";
+import { Image } from "emdash/ui";
+import Icon from "../components/Icon.astro";
+import "../styles/global.css";
+
+const { entry, error } = await getEmDashEntry("homepage", "homepage", {
+  locale: "id",
+});
+if (error) throw error;
+if (!entry)
+  return new Response(
+    "Beranda is unpublished. Publish it in EmDash to make the homepage available.",
+    { status: 503 },
+  );
+const content = entry.data;
+const socials = [
+  {
+    label: "Discord",
+    icon: "discord" as const,
+    url: sanitizeHref(content.discord_url),
+  },
+  {
+    label: "Instagram",
+    icon: "instagram" as const,
+    url: sanitizeHref(content.instagram_url),
+  },
+];
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={content.description} />
+    <title>{content.title}</title>
+    <script is:inline>
+      try {
+        const dark =
+          localStorage.getItem("theme") === "dark" ||
+          (!localStorage.getItem("theme") &&
+            matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+      } catch {
+        document.documentElement.classList.toggle(
+          "dark",
+          matchMedia("(prefers-color-scheme: dark)").matches,
+        );
+      }
+    </script>
+  </head>
+  <body>
+    <a
+      href="#top"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-60 focus:rounded focus:bg-card focus:p-3"
+      >Lewati ke konten utama</a
+    >
+    <header class="sticky top-0 z-50 bg-navbar shadow-md">
+      <div
+        class="mx-auto flex max-w-6xl items-center justify-between px-6 py-3"
+      >
+        <a href="#top" aria-label="HIMAFURI beranda">
+          <Image
+            image={content.logo}
+            width={36}
+            height={36}
+            priority
+            class="rounded-full"
+          />
+        </a>
+        <div class="flex items-center gap-5 sm:gap-6">
+          <nav
+            aria-label="Media sosial"
+            class="flex items-center gap-3 sm:gap-4"
+          >
+            {
+              socials.map((social) => (
+                <a
+                  class="flex items-center justify-center text-white/90 transition-opacity hover:opacity-100"
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${social.label} HIMAFURI`}
+                >
+                  <Icon name={social.icon} />
+                </a>
+              ))
+            }
+          </nav>
+          <div class="flex items-center gap-1.5">
+            <div
+              class="font-heading inline-flex items-stretch overflow-hidden rounded-md border border-black/15 bg-black/25 shadow-xs"
+              role="group"
+              aria-label="Bahasa situs"
+            >
+              <span
+                lang="id"
+                class="bg-white px-2.5 py-1 text-xs font-bold tracking-wide text-navbar shadow-xs"
+                aria-label="Bahasa Indonesia">ID</span
+              >
+              <button
+                type="button"
+                disabled
+                title="Terjemahan Inggris belum tersedia"
+                aria-label="Bahasa Inggris belum tersedia"
+                class="cursor-not-allowed px-2.5 py-1 text-xs font-bold tracking-wide text-white/60"
+                >EN</button
+              >
+            </div>
+            <button
+              id="theme-toggle"
+              type="button"
+              class="flex cursor-pointer items-center justify-center rounded-md border border-black/15 bg-black/25 p-1 text-white/80 shadow-xs transition-colors hover:bg-black/35 hover:text-white"
+              aria-label="Ganti ke mode gelap"
+              aria-pressed="false"
+            >
+              <Icon name="moon" size={16} class="dark:hidden" />
+              <Icon name="sun" size={16} class="hidden dark:block" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="top" tabindex="-1">
+      <section
+        class="relative flex min-h-130 items-center overflow-hidden py-12 md:py-16"
+      >
+        <Image
+          image={content.banner}
+          priority
+          class="absolute inset-0 z-0 h-full w-full object-cover opacity-75"
+        />
+        <div
+          class="absolute inset-0 z-1 bg-linear-to-b from-background/30 via-background/60 to-background"
+        >
+        </div>
+        <div
+          class="relative z-2 mx-auto flex w-full max-w-6xl flex-col items-center gap-8 px-6 md:flex-row md:gap-12"
+        >
+          <div
+            class="flex h-48.75 w-49.5 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-[0_16px_35px_rgba(36,124,192,0.2)] ring-4 ring-white/30 dark:ring-white/10"
+          >
+            <Image
+              image={content.mascot}
+              width={198}
+              height={195}
+              class="object-contain"
+            />
+          </div>
+          <div class="max-w-3xl text-center md:text-left">
+            <h1
+              class="font-heading mb-3 text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl"
+            >
+              {content.heading}
+            </h1>
+            <p
+              class="mb-6 text-base font-medium text-pretty text-muted-foreground sm:text-lg"
+            >
+              {content.intro}
+            </p>
+            <div
+              class="mb-6 flex flex-wrap justify-center gap-4 sm:gap-6 md:justify-start"
+            >
+              {
+                (content.statistics ?? []).map((stat) => (
+                  <div class="flex flex-col rounded-xl border border-border bg-card/80 px-4 py-2 shadow-xs backdrop-blur-xs">
+                    <>
+                      <span class="font-heading text-2xl font-extrabold text-foreground sm:text-3xl">
+                        {stat.value}
+                      </span>
+                      <span class="text-xs font-medium text-muted-foreground sm:text-sm">
+                        {stat.label}
+                      </span>
+                    </>
+                  </div>
+                ))
+              }
+            </div>
+            <a
+              href={sanitizeHref(content.discord_url)}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-heading inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-base font-semibold text-white shadow-lg transition-all hover:bg-primary/90 active:translate-y-0.5"
+              >{content.join_label}</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 py-12 md:grid-cols-2"
+      >
+        {
+          [
+            { title: content.vision_title, text: content.vision },
+            { title: content.mission_title, text: content.mission },
+          ].map((item) => (
+            <article class="rounded-2xl border border-border bg-card p-6 shadow-xs ring-1 ring-foreground/10 transition-shadow hover:shadow-md">
+              <>
+                <h2 class="font-heading pb-3 text-2xl font-bold text-card-foreground">
+                  {item.title}
+                </h2>
+                <p class="text-base leading-relaxed whitespace-pre-line text-muted-foreground">
+                  {item.text}
+                </p>
+              </>
+            </article>
+          ))
+        }
+      </section>
+
+      <section class="mx-auto max-w-6xl px-6 pt-4 pb-16">
+        <h2
+          class="font-heading mb-8 text-center text-2xl font-bold text-foreground sm:text-3xl"
+        >
+          {content.faq_title}
+        </h2>
+        <div class="mx-auto flex max-w-3xl flex-col gap-3">
+          {
+            (content.faqs ?? []).map((faq) => (
+              <details
+                name="faq"
+                class="overflow-hidden rounded-xl border border-border bg-card shadow-xs transition-all duration-200 hover:border-primary/40 hover:shadow-md"
+              >
+                <summary class="flex cursor-pointer items-center justify-between gap-4 px-6 py-4 text-left text-base font-semibold text-card-foreground transition-all hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring">
+                  <>
+                    <span>{faq.question}</span>
+                    <Icon
+                      name="chevron"
+                      class="size-5 shrink-0 text-muted-foreground transition-transform duration-200"
+                    />
+                  </>
+                </summary>
+                {faq.answer && (
+                  <div class="border-t border-border bg-muted/30 px-6 pt-4 pb-5 text-sm leading-relaxed whitespace-pre-line text-muted-foreground sm:text-base">
+                    {faq.answer}
+                  </div>
+                )}
+              </details>
+            ))
+          }
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-footer px-6 pt-14 pb-10">
+      <div class="mx-auto flex max-w-6xl flex-wrap justify-between gap-8">
+        <div class="flex max-w-90 items-start gap-4">
+          <Image
+            image={content.logo}
+            width={48}
+            height={48}
+            class="rounded-full"
+          />
+          <div>
+            <p class="font-heading mb-1 font-bold text-white">
+              {content.heading}
+            </p><p class="text-xs text-footer-foreground">
+              {content.copyright}
+            </p>
+          </div>
+        </div>
+        <nav class="min-w-40" aria-label={content.guides_title}>
+          <h3 class="font-heading mb-3 text-sm font-bold text-white">
+            {content.guides_title}
+          </h3>
+          <ul class="flex flex-col gap-2 text-sm text-footer-foreground">
+            {
+              (content.guide_links ?? []).map((link) => (
+                <li>
+                  <a
+                    href={sanitizeHref(link.url)}
+                    class="transition-colors hover:text-white"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <nav class="min-w-40" aria-label={content.social_title}>
+          <h3 class="font-heading mb-3 text-sm font-bold text-white">
+            {content.social_title}
+          </h3>
+          <ul class="flex flex-col gap-2 text-sm text-footer-foreground">
+            {
+              socials.map((social) => (
+                <li>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center gap-2 transition-colors hover:text-white"
+                  >
+                    <>
+                      <Icon name={social.icon} size={16} />
+                      <span>{social.label}</span>
+                    </>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+      <div class="mx-auto my-8 max-w-6xl border-t border-white/10"></div>
+      <figure
+        class="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-3 text-sm text-footer-foreground max-[860px]:flex-col max-[860px]:items-start"
+      >
+        <blockquote class="max-w-160">“{content.quote}”</blockquote><figcaption
+          class="italic whitespace-nowrap"
+        >
+          — {content.quote_author}
+        </figcaption>
+      </figure>
+    </footer>
+    <script>
+      const button = document.querySelector<HTMLButtonElement>("#theme-toggle");
+      const updateLabel = () => {
+        const dark = document.documentElement.classList.contains("dark");
+        button?.setAttribute(
+          "aria-label",
+          dark ? "Ganti ke mode terang" : "Ganti ke mode gelap",
+        );
+        button?.setAttribute("aria-pressed", String(dark));
+      };
+      updateLabel();
+      button?.addEventListener("click", () => {
+        const dark = document.documentElement.classList.toggle("dark");
+        try {
+          localStorage.setItem("theme", dark ? "dark" : "light");
+        } catch {
+          console.info("Theme preference cannot be saved in this browser.");
+        }
+        updateLabel();
+      });
+    </script>
+  </body>
+</html>
