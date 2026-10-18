@@ -1,0 +1,316 @@
+{
+  "version": "1",
+  "defaultLocale": "id",
+  "meta": {
+    "name": "HIMAFURI",
+    "description": "Konten beranda dari situs HIMAFURI yang ada."
+  },
+  "settings": {
+    "title": "HIMAFURI",
+    "tagline": "Persekutuan Mahasiswa Furry Indonesia dari berbagai macam perguruan tinggi."
+  },
+  "collections": [
+    {
+      "slug": "homepage",
+      "label": "Beranda",
+      "labelSingular": "Beranda",
+      "description": "Edit halaman Beranda yang sudah ada, lalu publikasikan perubahan.",
+      "routable": false,
+      "titleField": "title",
+      "urlPattern": "/",
+      "admin": {
+        "quickCreate": false
+      },
+      "supports": ["drafts", "revisions", "preview"],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Judul halaman",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "description",
+          "label": "Deskripsi situs untuk mesin pencari",
+          "type": "text",
+          "required": true
+        },
+        {
+          "slug": "heading",
+          "label": "Nama komunitas",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "intro",
+          "label": "Pengantar",
+          "type": "text",
+          "required": true
+        },
+        {
+          "slug": "join_label",
+          "label": "Teks tombol gabung",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "discord_url",
+          "label": "Tautan Discord",
+          "type": "url",
+          "required": true
+        },
+        {
+          "slug": "instagram_url",
+          "label": "Tautan Instagram",
+          "type": "url",
+          "required": true
+        },
+        {
+          "slug": "vision_title",
+          "label": "Judul visi",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "vision",
+          "label": "Visi",
+          "type": "text",
+          "required": true
+        },
+        {
+          "slug": "mission_title",
+          "label": "Judul misi",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "mission",
+          "label": "Misi",
+          "type": "text",
+          "required": true
+        },
+        {
+          "slug": "faq_title",
+          "label": "Judul FAQ",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "guides_title",
+          "label": "Judul panduan",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "social_title",
+          "label": "Judul media sosial",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "copyright",
+          "label": "Hak cipta",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "quote",
+          "label": "Kutipan",
+          "type": "text",
+          "required": true
+        },
+        {
+          "slug": "quote_author",
+          "label": "Penulis kutipan",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "logo",
+          "label": "Logo",
+          "type": "image",
+          "required": false
+        },
+        {
+          "slug": "banner",
+          "label": "Foto latar",
+          "type": "image",
+          "required": false
+        },
+        {
+          "slug": "mascot",
+          "label": "Maskot",
+          "type": "image",
+          "required": false
+        },
+        {
+          "slug": "statistics",
+          "label": "Statistik komunitas",
+          "type": "repeater",
+          "required": false,
+          "validation": {
+            "subFields": [
+              {
+                "slug": "value",
+                "label": "Jumlah",
+                "type": "string",
+                "required": true
+              },
+              {
+                "slug": "label",
+                "label": "Label",
+                "type": "string",
+                "required": true
+              }
+            ]
+          }
+        },
+        {
+          "slug": "faqs",
+          "label": "Pertanyaan dan jawaban",
+          "type": "repeater",
+          "required": false,
+          "validation": {
+            "subFields": [
+              {
+                "slug": "question",
+                "label": "Pertanyaan",
+                "type": "string",
+                "required": true
+              },
+              {
+                "slug": "answer",
+                "label": "Jawaban",
+                "type": "text",
+                "required": false
+              }
+            ]
+          }
+        },
+        {
+          "slug": "guide_links",
+          "label": "Tautan panduan",
+          "type": "repeater",
+          "required": false,
+          "validation": {
+            "subFields": [
+              {
+                "slug": "label",
+                "label": "Label",
+                "type": "string",
+                "required": true
+              },
+              {
+                "slug": "url",
+                "label": "Tautan",
+                "type": "url",
+                "required": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "content": {
+    "homepage": [
+      {
+        "id": "homepage",
+        "locale": "id",
+        "status": "published",
+        "data": {
+          "title": "HIMAFURI",
+          "description": "Website Resmi Himpunan Mahasiswa Furry Indonesia — Persekutuan Mahasiswa Furry Indonesia dari berbagai macam perguruan tinggi.",
+          "heading": "Himpunan Mahasiswa Furry Indonesia",
+          "intro": "Persekutuan Mahasiswa Furry Indonesia dari berbagai macam perguruan tinggi.",
+          "join_label": "Gabung ke Discord HIMAFURI",
+          "discord_url": "https://discord.com",
+          "instagram_url": "https://instagram.com",
+          "vision_title": "Visi",
+          "vision": "Merangkul mahasiswa-mahasiswa Perguruan Tinggi di Indonesia yang memiliki ketertarikan terhadap komunitas furry.",
+          "mission_title": "Misi",
+          "mission": "Melakukan segala kegiatan HIMAFURI terutama dalam mencari mahasiswa-mahasiswa yang tersebar di berbagai Perguruan Tinggi di Indonesia secara konsisten untuk mencapai Visi HIMAFURI.",
+          "faq_title": "Pertanyaan Yang Sering Ditanyakan",
+          "guides_title": "Panduan",
+          "social_title": "Media Sosial",
+          "copyright": "© 2026 Himpunan Mahasiswa Furry Indonesia",
+          "quote": "Pengaruh pengajaran itu umumnya memerdekakan manusia atas hidupnya lahir, sedang merdekanya hidup batin terdapat dari pendidikan.",
+          "quote_author": "Ki Hajar Dewantara",
+          "statistics": [
+            {
+              "value": "500+",
+              "label": "Anggota Komunitas"
+            },
+            {
+              "value": "130+",
+              "label": "Institusi Terdaftar"
+            }
+          ],
+          "faqs": [
+            {
+              "question": "Lorem Ipsum FAQ nya disini",
+              "answer": "Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos."
+            },
+            {
+              "question": "Lorem Ipsum FAQ nya disini",
+              "answer": ""
+            },
+            {
+              "question": "Lorem Ipsum FAQ nya disini",
+              "answer": ""
+            },
+            {
+              "question": "Lorem Ipsum FAQ nya disini",
+              "answer": ""
+            },
+            {
+              "question": "Lorem Ipsum FAQ nya disini",
+              "answer": ""
+            }
+          ],
+          "guide_links": [
+            {
+              "label": "Komunitas",
+              "url": "#top"
+            },
+            {
+              "label": "Peraturan & Tata Tertib",
+              "url": "#top"
+            },
+            {
+              "label": "Tautan Penting",
+              "url": "#top"
+            }
+          ],
+          "logo": {
+            "id": "",
+            "provider": "external",
+            "src": "/himafurilogo.png",
+            "alt": "Logo HIMAFURI",
+            "width": 1600,
+            "height": 1600,
+            "filename": "himafurilogo.png"
+          },
+          "banner": {
+            "id": "",
+            "provider": "external",
+            "src": "/himafuribanner.jpg",
+            "alt": "Anggota komunitas HIMAFURI berkumpul",
+            "width": 4096,
+            "height": 2731,
+            "filename": "himafuribanner.jpg"
+          },
+          "mascot": {
+            "id": "",
+            "provider": "external",
+            "src": "/mascot-placeholder.png",
+            "alt": "Placeholder maskot HIMAFURI",
+            "width": 198,
+            "height": 195,
+            "filename": "mascot-placeholder.png"
+          }
+        }
+      }
+    ]
+  }
+}

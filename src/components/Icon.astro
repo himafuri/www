@@ -1,0 +1,75 @@
+---
+interface Props {
+  name: "discord" | "instagram" | "moon" | "sun" | "chevron";
+  size?: number;
+  class?: string;
+}
+const { name, size = 20, class: className } = Astro.props;
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  aria-hidden="true"
+  class={className}
+>
+  {
+    name === "discord" && (
+      <path
+        fill="currentColor"
+        d="M20.3 4.4a19.8 19.8 0 0 0-4.9-1.5l-.6 1.2a18.1 18.1 0 0 0-5.5 0l-.6-1.2a20 20 0 0 0-5 1.5C.6 9.2-.2 13.9.2 18.5A20 20 0 0 0 6.3 21l1.3-2.1a13 13 0 0 1-1.9-.9l.5-.4c3.7 1.7 7.7 1.7 11.4 0l.5.4c-.6.3-1.2.6-1.9.9l1.3 2.1a20 20 0 0 0 6.1-2.5c.5-5.3-.8-10-3.3-14.1ZM8 15.2c-1.1 0-1.9-1-1.9-2.3s.8-2.3 1.9-2.3 2 1 1.9 2.3c0 1.3-.8 2.3-1.9 2.3Zm8 0c-1.1 0-1.9-1-1.9-2.3s.8-2.3 1.9-2.3 2 1 1.9 2.3c0 1.3-.8 2.3-1.9 2.3Z"
+      />
+    )
+  }
+  {
+    name === "instagram" && (
+      <g fill="none" stroke="currentColor" stroke-width="2">
+        <>
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r=".7" fill="currentColor" stroke="none" />
+        </>
+      </g>
+    )
+  }
+  {
+    name === "moon" && (
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M20.9 13a9 9 0 0 1-9.9-9.9A9 9 0 1 0 20.9 13Z"
+      />
+    )
+  }
+  {
+    name === "sun" && (
+      <g
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      >
+        <>
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+        </>
+      </g>
+    )
+  }
+  {
+    name === "chevron" && (
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m6 9 6 6 6-6"
+      />
+    )
+  }
+</svg>

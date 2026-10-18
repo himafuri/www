@@ -1,8 +1,6 @@
 @import "@fontsource-variable/jost";
 @import "@fontsource-variable/atkinson-hyperlegible-next";
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark, .dark *));
 
@@ -117,7 +115,23 @@
   h3,
   h4,
   h5,
-  h6 {
+  h6,
+  button,
+  input,
+  select,
+  textarea,
+  label,
+  summary {
     font-family: var(--font-heading);
   }
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+summary {
+  list-style: none;
+}
+details[open] summary svg {
+  transform: rotate(180deg);
 }

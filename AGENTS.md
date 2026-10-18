@@ -1,9 +1,9 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# HIMAFURI site
 
-# This is NOT the Next.js you know
+Follow these rules when changing the HIMAFURI site.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+## Check Astro and EmDash changes
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+Before changing EmDash schemas or calls to EmDash, read the relevant guides from the [EmDash documentation index](https://docs.emdashcms.com/llms.txt). When the documentation differs from the installed package, verify the interfaces against `node_modules/emdash/src/`.
 
-<!-- END:nextjs-agent-rules -->
+The owner registers the first administrator account and passkey. Local EmDash command-line content, schema, media, site, and types commands create a Dev Admin through authentication bypass. Use the direct SQLite seed command for initial local content. Leave owner account registration to the human.
